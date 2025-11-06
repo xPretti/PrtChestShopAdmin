@@ -1,0 +1,11 @@
+name: ${name}
+version: ${version}
+main: ${main}
+author: Pretti_
+api-version: 1.13
+softdepend: [ ChestShop ]
+#loadbefore: [  ]
+
+commands:
+  prtchestshopadmin:
+    aliases: [ csa ]

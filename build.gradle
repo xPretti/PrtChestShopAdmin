@@ -1,0 +1,103 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+/*
+ * Definições
+ */
+apply from: rootProject.file('defines.gradle')
+
+/*
+ * Propriedades
+ */
+group = DEF_GROUP
+version = DEF_VERSION
+
+/*
+ * Configurações dos subprojetos
+ */
+allprojects {
+    repositories {
+        mavenCentral()
+
+        // Spigos
+        maven {
+            url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+        }
+        maven {
+            url = 'https://repo.md-5.net/content/repositories/snapshots/'
+        }
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+        maven {
+            url 'https://repo.codemc.io/repository/nms/'
+        }
+        maven {
+            url 'https://repo.codemc.io/repository/maven-public/'
+        }
+    }
+}
+
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'java'
+    apply plugin: 'com.github.johnrengelman.shadow'
+
+    dependencies {
+        testImplementation platform('org.junit:junit-bom:5.10.0')
+        testImplementation 'org.junit.jupiter:junit-jupiter'
+
+        // Annotations
+        compileOnly 'org.jetbrains:annotations:24.0.0'
+    }
+
+    compileJava {
+        options.encoding = 'UTF-8'
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
+}
+
+/**
+ * Shadow JAR
+ */
+shadowJar {
+    archiveFileName = DEF_FINAL_NAME
+
+    mergeServiceFiles()
+
+    from(sourceSets.main.output)
+
+    subprojects.each { subproject ->
+        from(subproject.tasks.shadowJar.archiveFile) {
+            // relocate 'dev.pretti.treasuresapi', 'dev.pretti.prtminetreasures.libs.treasuresapi'
+            minimize() {
+                // exclude("dev.pretti.prtminetreasures.libs.treasuresapi.*")
+            }
+        }
+    }
+
+    manifest {
+        attributes(
+                'Main-Class': DEF_MAIN_CLASS // Ajuste para sua classe principal
+        )
+    }
+}
+
+
+/**
+ * TASKS
+ */
+tasks.build.dependsOn('shadowJar')
+
+task copyJar(type: Copy) {
+    from shadowJar.archiveFile
+    into DEF_FINAL_DIR
+}
+
+tasks.named('build') {
+    dependsOn(":core:processResources")
+    finalizedBy(copyJar)
+}

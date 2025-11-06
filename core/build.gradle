@@ -1,0 +1,45 @@
+/*
+ * Definições
+ */
+apply from: rootProject.file('defines.gradle')
+
+/**
+ * TASKS
+ */
+tasks.build.dependsOn('shadowJar')
+
+
+/**
+ * REPOSITORIES
+ */
+repositories {
+    maven {
+        url = uri("https://repo.minebench.de/")
+    }
+}
+
+dependencies {
+    // Spigot
+    compileOnly 'org.spigotmc:spigot-api:1.15.2-R0.1-SNAPSHOT'
+    compileOnly 'com.acrobot.chestshop:chestshop:3.9.2'
+}
+
+/**
+ * COMPILER PROPERTIES
+ */
+shadowJar {
+    archiveFileName = DEF_FINAL_NAME
+
+    mergeServiceFiles()
+}
+
+processResources {
+    outputs.upToDateWhen { false }
+    filesMatching("plugin.yml") {
+        expand(
+                name: DEF_NAME,
+                version: DEF_VERSION,
+                main: DEF_MAIN_CLASS
+        )
+    }
+}
