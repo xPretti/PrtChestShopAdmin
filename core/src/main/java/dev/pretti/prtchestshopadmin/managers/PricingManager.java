@@ -1,25 +1,26 @@
 package dev.pretti.prtchestshopadmin.managers;
 
-import dev.pretti.prtchestshopadmin.types.PricingDetails;
+import dev.pretti.prtchestshopadmin.interfaces.ISignDetails;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.UUID;
 
 public class PricingManager
 {
-  private final HashMap<UUID, PricingDetails> pricingDetails = new HashMap<>();
+  private final HashMap<UUID, ISignDetails> pricingDetails = new HashMap<>();
 
-  public void addPricingDetails(UUID uuid, PricingDetails pricingDetails)
+  public void addSignDetails(UUID uuid, ISignDetails pricingDetails)
   {
     this.pricingDetails.put(uuid, pricingDetails);
   }
 
-  public PricingDetails getPricingDetails(UUID uuid)
+  public ISignDetails getSignDetails(UUID uuid)
   {
     return pricingDetails.get(uuid);
   }
 
-  public void removePricingDetails(UUID uuid)
+  public void removeSignDetails(UUID uuid)
   {
     pricingDetails.remove(uuid);
   }
@@ -27,5 +28,9 @@ public class PricingManager
   public void clear()
   {
     pricingDetails.clear();
+  }
+
+  public boolean exist(@NotNull UUID uniqueId) {
+    return pricingDetails.containsKey(uniqueId);
   }
 }

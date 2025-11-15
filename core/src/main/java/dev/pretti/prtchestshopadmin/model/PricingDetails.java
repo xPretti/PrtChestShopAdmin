@@ -1,15 +1,16 @@
-package dev.pretti.prtchestshopadmin.types;
+package dev.pretti.prtchestshopadmin.model;
 
+import dev.pretti.prtchestshopadmin.interfaces.ISignDetails;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class PricingDetails
+public class PricingDetails implements ISignDetails
 {
   private final Integer amount;
   private final Double  buyPrice;
   private final Double  sellPrice;
 
-  public PricingDetails(@NotNull Integer amount, @NotNull Double buyPrice, @Nullable Double sellPrice)
+  public PricingDetails(@NotNull Integer amount, @Nullable Double buyPrice, @Nullable Double sellPrice)
   {
     this.amount    = amount;
     this.buyPrice  = buyPrice;
