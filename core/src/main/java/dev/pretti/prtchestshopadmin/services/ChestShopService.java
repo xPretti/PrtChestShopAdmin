@@ -64,8 +64,8 @@ public class ChestShopService
     Double oldBuy  = oldPrice.getBuy();
     Double oldSell = oldPrice.getSell();
 
-    Double newBuy  = oldBuy != null ? calcDetails.calculateBuyPrice(oldBuy) : null;
-    Double newSell = oldSell != null ? calcDetails.calculateSellPrice(oldSell) : null;
+    Double newBuy  = oldBuy != null ? (double)Math.round(calcDetails.calculateBuyPrice(oldBuy)) : null;
+    Double newSell = oldSell != null ? (double)Math.round(calcDetails.calculateSellPrice(oldSell)) : null;
 
     DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
     DecimalFormat        df      = new DecimalFormat("#.##", symbols);
